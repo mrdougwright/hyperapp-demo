@@ -14,7 +14,60 @@
       // -- RUN --
       app({
         node: document.getElementById('app'),
-        view: () => h('h1', {}, ['Hello ', h('i', {}, 'World!')]),
+        view: () =>
+          h('div', { id: 'app', class: 'container' }, [
+            h('div', { class: 'filter' }, [
+              ' Filter: ',
+              h('span', { class: 'filter-word' }, 'ocean'),
+              h('button', {}, '\u270E'),
+            ]),
+            h('div', { class: 'stories' }, [
+              h('ul', {}, [
+                h('li', { class: 'unread' }, [
+                  h('p', { class: 'title' }, [
+                    'The ',
+                    h('em', {}, 'Ocean'),
+                    ' is Sinking!',
+                  ]),
+                  h('p', { class: 'author' }, 'Kat Stropher'),
+                ]),
+                h('li', { class: 'reading' }, [
+                  h('p', { class: 'title' }, [
+                    h('em', {}, 'Ocean'),
+                    ' life is brutal',
+                  ]),
+                  h('p', { class: 'author' }, 'Surphy McBrah'),
+                ]),
+                h('li', {}, [
+                  h('p', { class: 'title' }, [
+                    'Family friendly fun at the ',
+                    h('em', {}, 'ocean'),
+                    ' exhibit',
+                  ]),
+                  h('p', { class: 'author' }, 'Guy Prosales'),
+                ]),
+              ]),
+            ]),
+            h('div', { class: 'story' }, [
+              h('h1', {}, 'Ocean life is brutal'),
+              h(
+                'p',
+                {},
+                `
+      Lorem ipsum dolor sit amet, consectetur adipiscing
+      elit, sed do eiusmod tempor incididunt ut labore et
+      dolore magna aliqua. Ut enim ad minim veniam, quis
+      nostrud exercitation ullamco laboris nisi ut aliquip
+      ex ea commodo consequat.
+    `
+              ),
+              h('p', { class: 'signature' }, 'Surphy McBrah'),
+            ]),
+            h('div', { class: 'autoupdate' }, [
+              'Auto update: ',
+              h('input', { type: 'checkbox' }),
+            ]),
+          ]),
       })
     </script>
   </head>
