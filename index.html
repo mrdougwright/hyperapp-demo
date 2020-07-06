@@ -8,6 +8,18 @@
       // -- EFFECTS & SUBSCRIPTIONS --
 
       // -- ACTIONS --
+      const StartEditingFilter = (state) => ({
+        ...state,
+        editingFilter: true,
+      })
+      const StopEditingFilter = (state) => ({
+        ...state,
+        editingFilter: false,
+      })
+      const SetFilter = (state, event) => ({
+        ...state,
+        filter: event.target.value,
+      })
 
       // -- VIEWS ---
       const emphasize = (word, string) =>
@@ -55,8 +67,18 @@
       const filterView = (props) =>
         h('div', { class: 'filter' }, [
           'Filter:',
-          h('span', { class: 'filter-word' }, props.filter),
-          h('button', {}, '\u270E'),
+
+          props.editingFilter
+            ? h('input', {
+                type: 'text',
+                value: props.filter,
+                oninput: SetFilter,
+              })
+            : h('span', { class: 'filter-word' }, props.filter),
+
+          props.editingFilter
+            ? h('button', { onclick: StopEditingFilter }, '\u2713')
+            : h('button', { onclick: StartEditingFilter }, '\u270E'),
         ])
 
       const storyDetail = (props) =>
