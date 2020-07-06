@@ -7,6 +7,7 @@
 
       // -- EFFECTS & SUBSCRIPTIONS --
       // Hyperapp effect function receives `dispatch` (1st argument) used to 'report back' to app
+      // dispatch uses 1st argument to dispatch actions, 2nd arg to return payloads
       const fetchJSONData = (dispatch, options) => {
         dispatch(options.onstart)
         fetch(options.url)
@@ -16,6 +17,11 @@
           .finally(() => dispatch(options.onfinish))
       }
 
+      // a Hyperapp subscription function. Returns a function, so Hyperapp can stop the subscription
+      const intervalSub = (dispatch, props) => {
+        const interval = setInterval(() => dispatch(props.action), props.time)
+        return () => clearInterval(interval)
+      }
       const storyLoader = (searchWord) => [
         fetchJSONData,
         {
@@ -73,6 +79,10 @@
             seen: true,
           },
         },
+      })
+      const ToggleAutoUpdate = (state) => ({
+        ...state,
+        autoUpdate: !state.autoUpdate,
       })
 
       // -- VIEWS ---
@@ -157,7 +167,11 @@
       const autoUpdateView = (props) =>
         h('div', { class: 'autoupdate' }, [
           'Auto update: ',
-          h('input', { type: 'checkbox' }),
+          h('input', {
+            type: 'checkbox',
+            checked: props.autoUpdate,
+            oninput: ToggleAutoUpdate,
+          }),
         ])
 
       const container = (content) => h('div', { class: 'container' }, content)
@@ -176,6 +190,16 @@
           storyLoader('ocean'),
         ],
         node: document.getElementById('app'),
+        subscriptions: (state) => [
+          state.autoUpdate &&
+            !state.editingFilter && [
+              intervalSub,
+              {
+                time: 5000, //milliseconds
+                action: StopEditingFilter,
+              },
+            ],
+        ],
         view: (state) =>
           container([
             filterView(state),
