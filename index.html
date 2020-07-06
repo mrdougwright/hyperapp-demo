@@ -13,6 +13,14 @@
           .then((data) => dispatch(options.onresponse, data))
           .catch(() => dispatch(options.onresponse, {}))
 
+      const storyLoader = (searchWord) => [
+        fetchJSONData,
+        {
+          url: `https://hyperapp.dev/tutorial-assets/stories/${searchWord.toLowerCase()}.json`,
+          onresponse: GotStories,
+        },
+      ]
+
       // -- ACTIONS --
       const GotStories = (state, stories) => ({
         ...state,
@@ -43,13 +51,7 @@
           editingFilter: false,
         },
         // effect declarations go here: //
-        [
-          fetchJSONData,
-          {
-            url: `https://hyperapp.dev/tutorial-assets/stories/${state.filter.toLowerCase()}.json`,
-            onresponse: GotStories,
-          },
-        ],
+        storyLoader(state.filter),
       ]
       const SetFilter = (state, word) => ({
         ...state,
@@ -153,27 +155,17 @@
 
       // -- RUN --
       app({
-        init: {
-          filter: 'ocean',
-          reading: '112',
-          stories: {
-            '112': {
-              title: 'The Ocean is Sinking',
-              author: 'Kat Stropher',
-              seen: true,
-            },
-            '113': {
-              title: 'Ocean life is brutal',
-              author: 'Surphy McBrah',
-              seen: false,
-            },
-            '114': {
-              title: 'Family friendly fun at the ocean exhibit',
-              author: 'Guy Prosales',
-              seen: false,
-            },
+        // init works like return value of action, including calling effects, when given as an array
+        init: [
+          {
+            editingFilter: false,
+            autoUpdate: false,
+            filter: 'ocean',
+            reading: null,
+            stories: {},
           },
-        },
+          storyLoader('ocean'),
+        ],
         node: document.getElementById('app'),
         view: (state) =>
           container([
