@@ -6,16 +6,51 @@
       import { h, app } from 'https://unpkg.com/hyperapp'
 
       // -- EFFECTS & SUBSCRIPTIONS --
+      // Hyperapp effect function receives `dispatch` (1st argument) used to 'report back' to app
+      const fetchJSONData = (dispatch, options) =>
+        fetch(options.url)
+          .then((response) => response.json())
+          .then((data) => dispatch(options.onresponse, data))
+          .catch(() => dispatch(options.onresponse, {}))
 
       // -- ACTIONS --
+      const GotStories = (state, stories) => ({
+        ...state,
+        // replace old stories with new,
+        // but keep the 'seen' value if it exists
+        stories: Object.keys(stories)
+          .map((id) => [
+            id,
+            {
+              ...stories[id],
+              seen: state.stories[id] && state.stories[id].seen,
+            },
+          ])
+          .reduce((o, [id, story]) => ((o[id] = story), o), {}),
+        // in case the current story is in the new list as well,
+        // keep it selected, Otherwise select nothing
+        reading: stories[state.reading] ? state.reading : null,
+      })
       const StartEditingFilter = (state) => ({
         ...state,
         editingFilter: true,
       })
-      const StopEditingFilter = (state) => ({
-        ...state,
-        editingFilter: false,
-      })
+      const StopEditingFilter = (state) => [
+        // When an action returns an array, Hyperapp understands that the first item is the
+        // new state we want, and the rest are effect declarations.
+        {
+          ...state,
+          editingFilter: false,
+        },
+        // effect declarations go here: //
+        [
+          fetchJSONData,
+          {
+            url: `https://hyperapp.dev/tutorial-assets/stories/${state.filter.toLowerCase()}.json`,
+            onresponse: GotStories,
+          },
+        ],
+      ]
       const SetFilter = (state, word) => ({
         ...state,
         filter: word,

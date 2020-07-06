@@ -12,10 +12,21 @@
   flex-direction: row;
 }
 
-.filter input {
+.filter {
+  position: relative;
+  width: 300px;
+  display: flex;
+  align-items: baseline;
+}
+
+.filter input,
+.filter-word {
   margin-left: 5px;
 }
 .filter button {
+  position: absolute;
+  right: 0;
+  top: -5px;
   border-radius: 8px;
   border: 2px double gray;
   font-size: 18px;
