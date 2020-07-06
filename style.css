@@ -42,6 +42,9 @@
   font-weight: bold;
   transition: all 0.25s ease-in-out;
 }
+.stories li.unread {
+  color: gray;
+}
 .story {
   margin: 0 10px;
 }

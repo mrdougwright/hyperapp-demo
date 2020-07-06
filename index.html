@@ -16,9 +16,9 @@
         ...state,
         editingFilter: false,
       })
-      const SetFilter = (state, event) => ({
+      const SetFilter = (state, word) => ({
         ...state,
-        filter: event.target.value,
+        filter: word,
       })
       const SelectStory = (state, id) => ({
         ...state,
@@ -46,6 +46,7 @@
         h(
           'li',
           {
+            // length- 2 array with the action first and the custom payload second.
             onclick: [SelectStory, props.id],
             class: {
               unread: props.unread,
@@ -84,7 +85,9 @@
             ? h('input', {
                 type: 'text',
                 value: props.filter,
-                oninput: SetFilter,
+                // length- 2 array with action first and custom `payload filter` second.
+                // use Payload filters when you need a payload that is a combination of custom data and event data
+                oninput: [SetFilter, (event) => event.target.value],
               })
             : h('span', { class: 'filter-word' }, props.filter),
 
@@ -117,22 +120,22 @@
       app({
         init: {
           filter: 'ocean',
-          reading: '113',
+          reading: '112',
           stories: {
             '112': {
               title: 'The Ocean is Sinking',
               author: 'Kat Stropher',
-              seen: false,
+              seen: true,
             },
             '113': {
               title: 'Ocean life is brutal',
               author: 'Surphy McBrah',
-              seen: true,
+              seen: false,
             },
             '114': {
               title: 'Family friendly fun at the ocean exhibit',
               author: 'Guy Prosales',
-              seen: true,
+              seen: false,
             },
           },
         },
