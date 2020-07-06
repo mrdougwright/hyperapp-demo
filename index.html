@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" />
+    <link rel="stylesheet" href="/style.css" />
     <script type="module">
       import { h, app } from 'https://unpkg.com/hyperapp'
 
@@ -81,38 +81,36 @@
 
       // -- RUN --
       app({
-        node: document.getElementById('app'),
-        view: () =>
-          container([
-            filterView({
-              filter: 'ocean',
-            }),
-            storyList({
-              stories: {
-                '112': {
-                  title: 'The Ocean is Sinking',
-                  author: 'Kat Stropher',
-                  seen: false,
-                },
-                '113': {
-                  title: 'Ocean life is cool',
-                  author: 'Surphy McBrah',
-                  seen: true,
-                },
-                '114': {
-                  title: 'Family friendly fun at the ocean exhibit',
-                  author: 'Guy Prosales',
-                  seen: true,
-                },
-              },
-              reading: '113',
-              filter: 'ocean',
-            }),
-            storyDetail({
-              title: 'Ocean life is cool',
+        init: {
+          filter: 'ocean',
+          reading: '113',
+          stories: {
+            '112': {
+              title: 'The Ocean is Sinking',
+              author: 'Kat Stropher',
+              seen: false,
+            },
+            '113': {
+              title: 'Ocean life is brutal',
               author: 'Surphy McBrah',
-            }),
-            autoUpdateView(),
+              seen: true,
+            },
+            '114': {
+              title: 'Family friendly fun at the ocean exhibit',
+              author: 'Guy Prosales',
+              seen: true,
+            },
+          },
+        },
+        node: document.getElementById('app'),
+        view: (state) =>
+          container([
+            filterView(state),
+            h('div', { class: 'row' }, [
+              storyList(state),
+              storyDetail(state.reading && state.stories[state.reading]),
+            ]),
+            autoUpdateView(state),
           ]),
       })
     </script>

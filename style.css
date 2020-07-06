@@ -1,3 +1,32 @@
 .container {
   display: flex;
+  flex-direction: column;
+  margin: 3em 1em;
+}
+.container div {
+  padding: 4px;
+  /* border: 1px solid red; */
+}
+.row {
+  display: flex;
+  flex-direction: row;
+}
+
+.filter button {
+  border-radius: 8px;
+  border: 2px double #ccc;
+  font-size: 18px;
+  margin: 5px;
+  width: 40px;
+  cursor: pointer;
+}
+.filter button:hover {
+  background-color: #ccc;
+}
+.stories {
+  min-width: 300px;
+  background-color: #9cce32;
+}
+.story {
+  margin: 0 10px;
 }
