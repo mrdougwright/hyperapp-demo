@@ -20,6 +20,17 @@
         ...state,
         filter: event.target.value,
       })
+      const SelectStory = (state, id) => ({
+        ...state,
+        reading: id,
+        stories: {
+          ...state.stories,
+          [id]: {
+            ...state.stories[id],
+            seen: true,
+          },
+        },
+      })
 
       // -- VIEWS ---
       const emphasize = (word, string) =>
@@ -35,6 +46,7 @@
         h(
           'li',
           {
+            onclick: [SelectStory, props.id],
             class: {
               unread: props.unread,
               reading: props.reading,

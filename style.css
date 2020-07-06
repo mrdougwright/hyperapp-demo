@@ -17,18 +17,30 @@
 }
 .filter button {
   border-radius: 8px;
-  border: 2px double #ccc;
+  border: 2px double gray;
   font-size: 18px;
   margin: 5px;
   width: 40px;
   cursor: pointer;
 }
 .filter button:hover {
-  background-color: #ccc;
+  background-color: gray;
 }
 .stories {
   min-width: 300px;
-  background-color: #9cce32;
+}
+.stories ul {
+  padding-left: 20px;
+  list-style-type: none;
+  cursor: pointer;
+}
+.stories li {
+  border-bottom: solid 1px red;
+  line-height: 8px;
+}
+.stories li:hover {
+  font-weight: bold;
+  transition: all 0.25s ease-in-out;
 }
 .story {
   margin: 0 10px;
